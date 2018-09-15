@@ -60,14 +60,13 @@ def position_to_cell(position):
     return cell_x, cell_y
 
 
-def check_event_in_the_cell(cell_positions, x, y):
+def check_event_in_the_cell(cell_position, x, y):
     """
     return a Booelan
     """
 
-    for coord in cell_positions:
-        if coord == (x, y):
-            return True
+    if cell_position == (x, y):
+        return True
 
     return False
 
@@ -118,7 +117,7 @@ def main():
 
                 events_in_the_cell = len(events.loc[(events['teamId'] == t) & \
                     (events['cell_positions'].apply(
-                        lambda k: check_event_in_the_cell(k, x, y)))])
+                        lambda k: check_event_in_the_cell(k[0], x, y)))])
                 accurate_passes_in_the_cell = len(
                     events.loc[(events['teamId'] == t) & \
                         (events['eventId'] == 8) & \
@@ -126,19 +125,19 @@ def main():
                                 lambda x: {"id": ACCURATE_TAG} in x)) & \
                                     (events['cell_positions'].apply(
                                         lambda k: check_event_in_the_cell(
-                                            k, x, y)))])
+                                            k[0], x, y)))])
                 shots_in_the_cell = len(
                     events.loc[(events['teamId'] == t) & \
                         (events['eventId'] == 10) & \
                             (events['cell_positions'].apply(
                                 lambda k: check_event_in_the_cell(
-                                    k, x, y)))])
+                                    k[0], x, y)))])
                 foul_in_the_cell = len(
                     events.loc[(events['teamId'] != t) & \
                         (events['eventId'] == 2) & \
                             (events['cell_positions'].apply(
                                 lambda k: check_event_in_the_cell(
-                                    k, x, y)))])
+                                    k[0], x, y)))])
 
                 temp['numero_cella_x'] = x
                 temp['numero_cella_y'] = y
