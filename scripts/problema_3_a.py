@@ -27,13 +27,13 @@ def get_events():
     return requests.get(EVENTS_URL).json()
 
 
-def position_to_cell(positions):
+def position_to_cell(position):
     """
     get position in the 5X5 grid
     """
 
-    x = positions['x']
-    y = positions['y']
+    x = position['x']
+    y = position['y']
     if x <= 20:
         cell_x = 0
     elif x > 20 and x <= 40:
@@ -59,12 +59,45 @@ def position_to_cell(positions):
     return cell_x, cell_y
 
 
+def check_event_in_the_cell(cell_positions, x, y):
+    """
+    return a Booelan
+    """
+
+    for coord in cell_positions:
+        if coord == (x, y):
+            return True
+
+    return False
+
+
 def main():
     match = get_events()
     players = get_players()
 
     events = pd.DataFrame(
         match, columns=['teamId', 'playerId', 'tags', 'eventId', 'positions'])
+
+    events['cell_positions'] = events['positions'].apply(
+        lambda x: [position_to_cell(k) for k in x])
+
+    results_d = list()
+    for t in events['teamId'].unique():
+        temp = {}
+        temp['nome_squadra'] = t
+        tot_events = len(events.loc[events['teamId'] == t])
+        for x in range(5):
+            for y in range(5):
+                events_in_the_cell = len(events.loc[(events['teamId'] == t) & \
+                    (events['cell_positions'].apply(
+                        lambda k: check_event_in_the_cell(k, x, y)))])
+                temp['numero_cella_x'] = x
+                temp['numero_cella_y'] = y
+                temp['frequenza_eventi'] = events_in_the_cell / \
+                    float(tot_events)
+                results_d.append(temp)
+
+    pd.DataFrame(results_d).to_csv('problema_3_a.csv', index=False)
 
 
 if __name__ == "__main__":
