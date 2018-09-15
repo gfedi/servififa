@@ -177,10 +177,10 @@ def main():
     npter2 =  np.array(terteam2)
     npquater1 =  np.array(quaterteam1)
     npquater2 =  np.array(quaterteam2)
-    simil0=np.linalg.norm(np.dot(npunum1,npunum2))/np.linalg.norm(npunum1)/np.linalg.norm(npunum2)
-    simil1=np.linalg.norm(np.dot(npbis1,npbis2))/np.linalg.norm(npbis1)/np.linalg.norm(npbis2)
-    simil2=np.linalg.norm(np.dot(npter1,npter2))/np.linalg.norm(npter1)/np.linalg.norm(npter2)
-    simil3=np.linalg.norm(np.dot(npquater1,npquater2))/np.linalg.norm(npquater1)/np.linalg.norm(npquater2)
+    simil0=np.linalg.norm(np.multiply(npunum1,npunum2))/np.linalg.norm(npunum1)/np.linalg.norm(npunum2)
+    simil1=np.linalg.norm(np.multiply(npbis1,npbis2))/np.linalg.norm(npbis1)/np.linalg.norm(npbis2)
+    simil2=np.linalg.norm(np.multiply(npter1,npter2))/np.linalg.norm(npter1)/np.linalg.norm(npter2)
+    simil3=np.linalg.norm(np.multiply(npquater1,npquater2))/np.linalg.norm(npquater1)/np.linalg.norm(npquater2)
 
     results_f=[{'tipo_griglia':'frequenza_eventi','similarity':simil0},{'tipo_griglia':'frequenza_passaggi_accurati','similarity':simil1},{'tipo_griglia':'frequenza_tiri','similarity':simil2},{'tipo_griglia':'frequenza_falli_subiti','similarity':simil3}] 
 
