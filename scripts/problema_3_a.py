@@ -83,32 +83,14 @@ def main():
 
     results_d = []
     for t in events['teamId'].unique():
-        tot_events = len(events.loc[(events['teamId'] == t) & \
-            (events['positions'].apply(lambda x: len(x) == 1))]) + 2 * len(
-                events.loc[(events['teamId'] == t) & \
-                    (events['positions'].apply(lambda x: len(x) == 2))])
+        tot_events = len(events.loc[(events['teamId'] == t)])
         tot_accurate_passes = len(events.loc[(events['teamId'] == t) & \
             (events['eventId'] == 8) & \
-                (events['tags'].apply(lambda x: {"id": ACCURATE_TAG} in x)) & \
-                    (events['positions'].apply(lambda x: len(x) == 1))]) + \
-                        2 * len(events.loc[(events['teamId'] == t) & \
-                            (events['eventId'] == 8) & \
-                                (events['tags'].apply(
-                                    lambda x: {"id": ACCURATE_TAG} in x)) & \
-                                        (events['positions'].apply(
-                                            lambda x: len(x) == 2))])
+                (events['tags'].apply(lambda x: {"id": ACCURATE_TAG} in x))])
         tot_shots = len(events.loc[(events['teamId'] == t) & \
-            (events['eventId'] == 10) & (events['positions'].apply(
-                lambda x: len(x) == 1))]) + 2 * len(
-                    events.loc[(events['teamId'] == t) & \
-                        (events['eventId'] == 10) & (events['positions'].apply(
-                            lambda x: len(x) == 2))])
+            (events['eventId'] == 10)])
         tot_foul = len(events.loc[(events['teamId'] != t) & \
-            (events['eventId'] == 2) & (events['positions'].apply(
-                lambda x: len(x) == 1))]) + 2 * len(
-                    events.loc[(events['teamId'] != t) & \
-                        (events['eventId'] == 2) & (events['positions'].apply(
-                            lambda x: len(x) == 2))])
+            (events['eventId'] == 2)])
 
         for x in range(5):
             for y in range(5):
