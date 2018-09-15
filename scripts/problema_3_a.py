@@ -9,6 +9,7 @@ PLAYERS_URL = ("https://raw.githubusercontent.com/mesosbrodleto/"
               "soccerDataChallenge/master/players.json")
 EVENTS_URL = ("https://raw.githubusercontent.com/mesosbrodleto/"
               "soccerDataChallenge/master/worldCup-final.json")
+ACCURATE_TAG = 1801
 
 
 def get_players():
@@ -81,20 +82,55 @@ def main():
     events['cell_positions'] = events['positions'].apply(
         lambda x: [position_to_cell(k) for k in x])
 
-    results_d = list()
+    results_d = []
     for t in events['teamId'].unique():
-        temp = {}
-        temp['nome_squadra'] = t
         tot_events = len(events.loc[events['teamId'] == t])
+        tot_accurate_passes = len(events.loc[(events['teamId'] == t) & \
+            (events['eventId'] == 8) & \
+                (events['tags'].apply(lambda x: {"id": ACCURATE_TAG} in x))])
+        tot_shots = len(events.loc[(events['teamId'] == t) & \
+            (events['eventId'] == 10)])
+        tot_foul = len(events.loc[(events['teamId'] != t) & \
+            (events['eventId'] == 2)])
         for x in range(5):
             for y in range(5):
+                temp = {}
+                temp['nome_squadra'] = t
+
                 events_in_the_cell = len(events.loc[(events['teamId'] == t) & \
                     (events['cell_positions'].apply(
                         lambda k: check_event_in_the_cell(k, x, y)))])
+                accurate_passes_in_the_cell = len(
+                    events.loc[(events['teamId'] == t) & \
+                        (events['eventId'] == 8) & \
+                            (events['tags'].apply(
+                                lambda x: {"id": ACCURATE_TAG} in x)) & \
+                                    (events['cell_positions'].apply(
+                                        lambda k: check_event_in_the_cell(
+                                            k, x, y)))])
+                shots_in_the_cell = len(
+                    events.loc[(events['teamId'] == t) & \
+                        (events['eventId'] == 10) & \
+                            (events['cell_positions'].apply(
+                                lambda k: check_event_in_the_cell(
+                                    k, x, y)))])
+                foul_in_the_cell = len(
+                    events.loc[(events['teamId'] != t) & \
+                        (events['eventId'] == 2) & \
+                            (events['cell_positions'].apply(
+                                lambda k: check_event_in_the_cell(
+                                    k, x, y)))])
+
                 temp['numero_cella_x'] = x
                 temp['numero_cella_y'] = y
                 temp['frequenza_eventi'] = events_in_the_cell / \
                     float(tot_events)
+                temp['frequenza_passaggi_accurati'] = \
+                    accurate_passes_in_the_cell / float(tot_accurate_passes)    
+                temp['frequenza_tiri'] = shots_in_the_cell / \
+                    float(tot_shots)
+                temp['frequenza_falli_subiti'] = foul_in_the_cell / \
+                    float(tot_foul)
                 results_d.append(temp)
 
     pd.DataFrame(results_d).to_csv('problema_3_a.csv', index=False)
