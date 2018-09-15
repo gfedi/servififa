@@ -5,6 +5,7 @@ import pandas as pd
 from numpy import array
 import numpy as np
 
+
 PLAYERS_URL = ("https://raw.githubusercontent.com/mesosbrodleto/"
               "soccerDataChallenge/master/players.json")
 EVENTS_URL = ("https://raw.githubusercontent.com/mesosbrodleto/"
@@ -92,39 +93,24 @@ def main():
 
     firstteam=True
     for t in events['teamId'].unique():
-        tot_events = len(events.loc[(events['teamId'] == t) & \
-            (events['positions'].apply(lambda x: len(x) == 1))]) + 2 * len(
-                events.loc[(events['teamId'] == t) & \
-                    (events['positions'].apply(lambda x: len(x) == 2))])
+        tot_events = len(events.loc[(events['teamId'] == t)])
         tot_accurate_passes = len(events.loc[(events['teamId'] == t) & \
             (events['eventId'] == 8) & \
-                (events['tags'].apply(lambda x: {"id": ACCURATE_TAG} in x)) & \
-                    (events['positions'].apply(lambda x: len(x) == 1))]) + \
-                        2 * len(events.loc[(events['teamId'] == t) & \
-                            (events['eventId'] == 8) & \
-                                (events['tags'].apply(
-                                    lambda x: {"id": ACCURATE_TAG} in x)) & \
-                                        (events['positions'].apply(
-                                            lambda x: len(x) == 2))])
+                (events['tags'].apply(lambda x: {"id": ACCURATE_TAG} in x))])
         tot_shots = len(events.loc[(events['teamId'] == t) & \
-            (events['eventId'] == 10) & (events['positions'].apply(
-                lambda x: len(x) == 1))]) + 2 * len(
-                    events.loc[(events['teamId'] == t) & \
-                        (events['eventId'] == 10) & (events['positions'].apply(
-                            lambda x: len(x) == 2))])
+            (events['eventId'] == 10)])
         tot_foul = len(events.loc[(events['teamId'] != t) & \
-            (events['eventId'] == 2) & (events['positions'].apply(
-                lambda x: len(x) == 1))]) + 2 * len(
-                    events.loc[(events['teamId'] != t) & \
-                        (events['eventId'] == 2) & (events['positions'].apply(
-                            lambda x: len(x) == 2))])
+            (events['eventId'] == 2)])
 
         for x in range(5):
             unumtemp=[]
             bistemp=[]
             tertemp=[]
             quatertemp=[]
+
             for y in range(5):
+                temp = {}
+                temp['nome_squadra'] = t
 
                 events_in_the_cell = len(events.loc[(events['teamId'] == t) & \
                     (events['cell_positions'].apply(
@@ -149,6 +135,8 @@ def main():
                             (events['cell_positions'].apply(
                                 lambda k: check_event_in_the_cell(
                                     k[0], x, y)))])
+
+
                 unumtemp.append(events_in_the_cell/float(tot_events))
                 bistemp.append(accurate_passes_in_the_cell/float(tot_accurate_passes))
                 tertemp.append(shots_in_the_cell/float(tot_shots))
@@ -177,15 +165,16 @@ def main():
     npter2 =  np.array(terteam2)
     npquater1 =  np.array(quaterteam1)
     npquater2 =  np.array(quaterteam2)
-    simil0=np.linalg.norm(np.dot(npunum1,npunum2))/np.linalg.norm(npunum1)/np.linalg.norm(npunum2)
-    simil1=np.linalg.norm(np.dot(npbis1,npbis2))/np.linalg.norm(npbis1)/np.linalg.norm(npbis2)
-    simil2=np.linalg.norm(np.dot(npter1,npter2))/np.linalg.norm(npter1)/np.linalg.norm(npter2)
-    simil3=np.linalg.norm(np.dot(npquater1,npquater2))/np.linalg.norm(npquater1)/np.linalg.norm(npquater2)
+    simil0=np.linalg.norm(np.multiply(npunum1,npunum2))/np.linalg.norm(npunum1)/np.linalg.norm(npunum2)
+    simil1=np.linalg.norm(np.multiply(npbis1,npbis2))/np.linalg.norm(npbis1)/np.linalg.norm(npbis2)
+    simil2=np.linalg.norm(np.multiply(npter1,npter2))/np.linalg.norm(npter1)/np.linalg.norm(npter2)
+    simil3=np.linalg.norm(np.multiply(npquater1,npquater2))/np.linalg.norm(npquater1)/np.linalg.norm(npquater2)
 
-    results_f=[{'tipo_griglia':'frequenza_eventi','similarity':simil0},{'tipo_griglia':'frequenza_passaggi_accurati','similarity':simil1},{'tipo_griglia':'frequenza_tiri','similarity':simil2},{'tipo_griglia':'frequenza_falli_subiti','similarity':simil3}] 
+    results_f=[{'tipo_griglia':'frequenza_eventi','similarity':simil0},{'tipo_griglia':'frequenza_passaggi_accurati','similarity':simil1},{'tipo_griglia':'frequenza_tiri','similarity':simil2},{'tipo_griglia':'frequenza_falli_subiti','similarity':simil3}]
 
 
     pd.DataFrame(results_f).to_csv('problema_3_b.csv', index=False)
+
 
 
 if __name__ == "__main__":
