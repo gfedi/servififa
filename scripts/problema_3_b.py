@@ -81,7 +81,8 @@ def main():
     events['cell_positions'] = events['positions'].apply(
         lambda x: [position_to_cell(k) for k in x])
 
-
+    unumteam1=[]
+    unumteam2=[]
     bisteam1=[]
     bisteam2=[]
     terteam1=[]
@@ -119,6 +120,7 @@ def main():
                             lambda x: len(x) == 2))])
 
         for x in range(5):
+            unumtemp=[]
             bistemp=[]
             tertemp=[]
             quatertemp=[]
@@ -147,15 +149,17 @@ def main():
                             (events['cell_positions'].apply(
                                 lambda k: check_event_in_the_cell(
                                     k[0], x, y)))])
-
+                unumtemp.append(events_in_the_cell/float(tot_events))
                 bistemp.append(accurate_passes_in_the_cell/float(tot_accurate_passes))
                 tertemp.append(shots_in_the_cell/float(tot_shots))
                 quatertemp.append(foul_in_the_cell/float(tot_foul))
             if firstteam:
+              unumteam1.append(unumtemp)
               bisteam1.append(bistemp)
               terteam1.append(tertemp)
               quaterteam1.append(quatertemp)
             else:
+              unumteam2.append(unumtemp)
               bisteam2.append(bistemp)
               terteam2.append(tertemp)
               quaterteam2.append(quatertemp)
@@ -165,17 +169,20 @@ def main():
     #print(terteam1,terteam2)    
     #print(quaterteam1,quaterteam2)    
 
+    npunum1 =  np.array(unumteam1)
+    npunum2 =  np.array(unumteam2)
     npbis1 =  np.array(bisteam1)
     npbis2 =  np.array(bisteam2)
     npter1 =  np.array(terteam1)
     npter2 =  np.array(terteam2)
     npquater1 =  np.array(quaterteam1)
     npquater2 =  np.array(quaterteam2)
+    simil0=np.linalg.norm(np.dot(npunum1,npunum2))/np.linalg.norm(npunum1)/np.linalg.norm(npunum2)
     simil1=np.linalg.norm(np.dot(npbis1,npbis2))/np.linalg.norm(npbis1)/np.linalg.norm(npbis2)
     simil2=np.linalg.norm(np.dot(npter1,npter2))/np.linalg.norm(npter1)/np.linalg.norm(npter2)
     simil3=np.linalg.norm(np.dot(npquater1,npquater2))/np.linalg.norm(npquater1)/np.linalg.norm(npquater2)
 
-    results_f=[{'tipo_griglia':'frequenza_passaggi_accurati','similarity':simil1},{'tipo_griglia':'frequenza_tiri','similarity':simil2},{'tipo_griglia':'frequenza_falli_subiti','similarity':simil3}] 
+    results_f=[{'tipo_griglia':'frequenza_eventi','similarity':simil0},{'tipo_griglia':'frequenza_passaggi_accurati','similarity':simil1},{'tipo_griglia':'frequenza_tiri','similarity':simil2},{'tipo_griglia':'frequenza_falli_subiti','similarity':simil3}] 
 
 
     pd.DataFrame(results_f).to_csv('problema_3_b.csv', index=False)
