@@ -48,7 +48,7 @@ def main():
                           for k in accurate_passes_x_team if t in k])
         results_d.append(
             {'team': t, 'mean' : accuracy.mean(), 'std' : accuracy.std()})
-    results = pd.DataFrame(results_d).to_csv('problema_2_a.csv', index=False)
+    pd.DataFrame(results_d).to_csv('problema_2_a.csv', index=False)
 
 
 if __name__ == "__main__":
