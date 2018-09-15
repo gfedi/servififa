@@ -64,7 +64,7 @@ def main():
     for playID in goodplayers:
       positions=[]
       for event in events:
-        if event['playerId']==playID: positions=positions+event['positions']
+        if event['playerId']==playID: positions=positions+[event['positions'][0]]
       xpos=[]
       ypos=[]
       for position in positions:
