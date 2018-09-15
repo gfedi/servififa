@@ -40,10 +40,13 @@ def main():
      eventdiff=[]
      player_name[player['playerId']]=player['name']
      for event in events:
-      player_team[player['playerId']]=event['teamId']
       if player['playerId']==event['playerId']:
-       timeline.append(event['eventSec'])
-     if (max(timeline)-min(timeline))/60.>45.: 
+       player_team[player['playerId']]=event['teamId']
+       #if event['teamId']=='Croatia': print(timeline)
+       if event['matchPeriod']=='1H': timeline.append(event['eventSec'])
+       if event['matchPeriod']=='2H': timeline.append(event['eventSec']+2700)
+     #print(timeline)
+     if (max(timeline)-min(timeline))/60>45.: 
        goodplayers.append(player['playerId'])
        for i in range(len(timeline)):
          if i!=0: eventdiff.append(timeline[i]-timeline[i-1])
