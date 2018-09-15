@@ -47,7 +47,9 @@ def main():
         accuracy = array([accurate_passes_x_team[k] / float(passes_x_team[k])
                           for k in accurate_passes_x_team if t in k])
         results_d.append(
-            {'team': t, 'mean' : accuracy.mean(), 'std' : accuracy.std()})
+            {'nome_squadra': t, 'accuratezza_media_dei_passaggi' : accuracy.mean(), 'standard_deviation_accuratezza_media_dei_passaggi' : accuracy.std()})
+
+
     pd.DataFrame(results_d).to_csv('problema_2_a.csv', index=False)
 
 
