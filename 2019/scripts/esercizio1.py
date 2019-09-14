@@ -25,7 +25,7 @@ for t in set(players):
 ord_play_events = sorted(play_events, key=lambda x: x[0])
 
 with open("esercizio1.csv", "w") as f:
-    f.write(";".join(["playerID", "n_events"]))
+    f.write(";".join(["playerId", "n_events"]))
     f.write("\n")
     for el in ord_play_events:
         f.write(";".join([str(e) for e in el]))
