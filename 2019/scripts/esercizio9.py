@@ -22,13 +22,17 @@ play_events = []
 for t in set(teams):
     evs=0
     maxi=0
+    teamtemp=""
     for event in events_dict:
+      if event['teamId'] != teamtemp:
+         evs=0
       if event['teamId']==t and event['eventName']=="Pass":
         if {"id":1801} in event['tags']:
           evs+=1
           if evs>maxi: maxi=evs
         else:
           evs=0
+      teamtemp=event['teamId']
     play_events.append((t, maxi))
 
 ord_play_events = sorted(play_events, key=lambda x: x[0])
