@@ -13,7 +13,7 @@ sec2h = [e[0] for e in tempi if e[1]=="2H"]
 reg = []
 for period in ["1H","2H"]:
   for temp in range(int(max(sec1h)/600)+1):
-     eventi = len([e for e in events_dict if e["eventSec"]>temp*600 and e["eventSec"]<(temp+1)*600])
+     eventi = len([e for e in events_dict if e["matchPeriod"]==period and e["eventSec"]>temp*600 and e["eventSec"]<(temp+1)*600])
      tempo=""
      if period=="1H": tempo="primo"
      if period=="2H": tempo="secondo"
