@@ -20,3 +20,4 @@ with open("esercizio10.csv", "w") as f:
     f.write(";".join(["distanza_media"]))
     f.write("\n")
     f.write(str(distanza_media))
+    f.write("\n")
