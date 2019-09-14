@@ -19,10 +19,11 @@ sorted_player_intercept = sorted(
     player_intercept, key=lambda x: x[1], reverse=True)[0:3]
 sorted_player_solution = [(p[0]["wyId"], p[0]["role"]["name"], p[1])
                           for p in sorted_player_intercept]
+sorted_final = sorted(sorted_player_solution, key=lambda x: x[0], reverse=True)
 
 with open("esercizio17.csv", "w") as f:
     f.write(";".join(["playerId", "role", "n_intercetti"]))
     f.write("\n")
-    for el in sorted_player_solution:
+    for el in sorted_final:
         f.write(";".join([str(e) for e in el]))
         f.write("\n")
