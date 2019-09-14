@@ -20,6 +20,7 @@ players = [e["playerId"] for e in events_dict if e["playerId"] != 0]
 
 play_events = []
 for t in set(players):
+  if [player["role"]["name"] for player in players_dict if player["wyId"]==t] == ["Forward"]: 
     evs = len([e for e in events_dict if e["playerId"] != 0 and 
                                          e["playerId"]==t and 
                                          e['subEventName']=='Ground attacking duel' and
